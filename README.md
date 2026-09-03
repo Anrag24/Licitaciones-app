@@ -190,4 +190,6 @@ La aplicación estará disponible en `http://localhost:3000`.
 - **Cron Jobs en Producción:** Configurados en `vercel.json` con programación diaria (`0 0 * * *`) y ejecución segura mediante autorización Bearer.
 ## Sección de Evidencias
 <img width="1917" height="906" alt="email-evidencia" src="https://github.com/user-attachments/assets/5058c914-93dd-4cd5-bd89-93050b7cca38" />
+<img width="1609" height="697" alt="evidencia_resend" src="https://github.com/user-attachments/assets/7c9309f9-b46b-45a9-aff3-586f3179089b" />
+
 
