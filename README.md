@@ -57,24 +57,23 @@ El sistema implementa una máquina de estados finitos estricta. Cualquier transi
 
 ### Flujo de Estados
 
-```
-[Borrador] 
-    │ (Exige documento subido -> Envía correo con adjunto)
-    ▼
-[Activa] ───────────────┬───────────────┐
-    │                   │               │
-    │ (Ganada)          │ (Manual)      │ (Vencimiento automático Cron/<48h)
-    ▼                   ▼               ▼
-[Finalizada]        [Perdida]       [Perdida]
-    │
-    │ (Facturación)
-    ▼
-[Por Cobrar]
-    │
-    │ (Pagos registrados hasta saldo = 0)
-    ▼
-[Cobrada]
-```
+1. **Borrador a Activa:**
+   - Requiere obligatoriamente haber subido el documento formal de la propuesta a Supabase Storage.
+   - Dispara automáticamente el envío de correo electrónico al cliente (vía Resend) con el resumen de la licitación y el archivo PDF adjunto.
+   - Inicia el conteo hacia la fecha límite.
+
+2. **Activa a Finalizada:**
+   - Transición manual ejecutada cuando la empresa gana la licitación y concluye el proceso de adjudicación.
+
+3. **Activa a Perdida:**
+   - Transición manual: Si el cliente rechaza la propuesta o no se adjudica la licitación.
+   - Transición automática: Ejecutada por la tarea programada (Vercel Cron) o el mecanismo de verificación al expirar la fecha límite sin resolución previa.
+
+4. **Finalizada a Por Cobrar:**
+   - Transición ejecutada al emitir la factura correspondiente, habilitando el módulo de registro de abonos y pagos.
+
+5. **Por Cobrar a Cobrada:**
+   - Transición automática ejecutada por el sistema en el momento exacto en que la suma de los pagos registrados liquida el 100% del monto facturado (saldo pendiente igual a 0).
 
 ### Reglas de Negocio Implementadas
 
@@ -193,5 +192,10 @@ La aplicación estará disponible en `http://localhost:3000`.
 
 <img width="1482" height="685" alt="evidencia_resend" src="https://github.com/user-attachments/assets/a3363d8e-af9c-4986-aeed-581f1a4c26d8" />
 
+## 8. NOTA
+### ⚠️ Nota sobre el envío de correos (Resend)
 
+El servicio transaccional está configurado con una cuenta gratuita de **Resend** sin dominio personalizado verificado. Por restricciones de la plataforma en este plan, el envío de correos salientes está limitado exclusivamente a la dirección de correo del propietario de la cuenta. 
+
+Durante las pruebas de activación de licitaciones y recordatorios, las notificaciones y los documentos adjuntos se dirigen a este correo registrado para validar el flujo completo de entrega. En la sección de evidencias se incluyen capturas del dashboard de Resend que demuestran la correcta ejecución y entrega de los mensajes.
 
