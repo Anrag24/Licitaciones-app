@@ -35,6 +35,25 @@ export async function GET(
       return NextResponse.json({ error: 'Licitacion no encontrada' }, { status: 404 });
     }
 
+    // Lazy expiration: si esta activa y ya paso la fecha limite, la pasamos a perdida
+    if (licitacion.estado === 'activa' && new Date(licitacion.fechaLimite) < new Date()) {
+      await prisma.$transaction([
+        prisma.licitacion.update({
+          where: { id: licitacion.id },
+          data: { estado: 'perdida' },
+        }),
+        prisma.historialTransicion.create({
+          data: {
+            licitacionId: licitacion.id,
+            estadoAnterior: 'activa',
+            estadoNuevo: 'perdida',
+            usuarioId: licitacion.creadoPorId,
+          },
+        }),
+      ]);
+      licitacion.estado = 'perdida';
+    }
+
     const totalProductos = licitacion.productos.reduce(
       (sum, p) => sum + p.cantidad * p.precioUnitario, 0
     );

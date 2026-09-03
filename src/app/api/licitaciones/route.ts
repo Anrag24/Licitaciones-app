@@ -28,6 +28,27 @@ export async function GET(req: NextRequest) {
       },
     });
 
+    const now = new Date();
+    for (const lic of licitaciones) {
+      if (lic.estado === 'activa' && new Date(lic.fechaLimite) < now) {
+        await prisma.$transaction([
+          prisma.licitacion.update({
+            where: { id: lic.id },
+            data: { estado: 'perdida' },
+          }),
+          prisma.historialTransicion.create({
+            data: {
+              licitacionId: lic.id,
+              estadoAnterior: 'activa',
+              estadoNuevo: 'perdida',
+              usuarioId: user.id,
+            },
+          }),
+        ]);
+        lic.estado = 'perdida';
+      }
+    }
+
     return NextResponse.json(licitaciones);
   } catch {
     return NextResponse.json({ error: 'Error interno' }, { status: 500 });
