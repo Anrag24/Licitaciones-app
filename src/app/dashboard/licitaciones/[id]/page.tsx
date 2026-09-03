@@ -214,7 +214,7 @@ export default function LicitacionDetailPage() {
 
   if (!lic) return null;
 
-  const isEditable = lic.estado === 'borrador' || lic.estado === 'activa';
+  const isEditable = lic.estado === 'borrador';
   const budgetUsed = lic.presupuestoMaximo > 0 ? (lic.totalProductos / lic.presupuestoMaximo) * 100 : 0;
   const paymentProgress = lic.totalProductos > 0 ? (lic.totalPagos / lic.totalProductos) * 100 : 0;
 

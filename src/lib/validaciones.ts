@@ -19,7 +19,7 @@ export function esTransicionValida(
 }
 
 export function esEditable(estado: EstadoLicitacion): boolean {
-  return estado === 'borrador' || estado === 'activa';
+  return estado === 'borrador';
 }
 
 export function validarPresupuesto(
