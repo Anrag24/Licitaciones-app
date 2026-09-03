@@ -1,6 +1,3 @@
-<img width="1917" height="906" alt="email-evidencia" src="https://github.com/user-attachments/assets/b8b2fac1-a59f-4616-bbec-b9ff9c42ee4e" />
-<img width="1917" height="906" alt="email-evidencia" src="https://github.com/user-attachments/assets/2efb3436-1fb9-420d-ab9e-2625076d2e32" />
-<img width="1917" height="906" alt="email-evidencia" src="https://github.com/user-attachments/assets/6e15e09e-0eee-4d37-86a3-138c2cba50a5" />
 ---
 
 # Sistema de Gestión de Licitaciones
@@ -193,6 +190,4 @@ La aplicación estará disponible en `http://localhost:3000`.
 - **Cron Jobs en Producción:** Configurados en `vercel.json` con programación diaria (`0 0 * * *`) y ejecución segura mediante autorización Bearer.
 ## Sección de Evidencias
 
-![Evidencia Email](./docs/email-evidencia.png)
-
-**(Nota para el evaluador: Si desea ver la evidencia del archivo almacenado, por favor consulte el panel web en producción).**
+<img width="1917" height="906" alt="email-evidencia" src="https://github.com/user-attachments/assets/b8b2fac1-a59f-4616-bbec-b9ff9c42ee4e" />
