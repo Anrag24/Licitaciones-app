@@ -1,0 +1,122 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Rol {
+  admin
+  user
+}
+
+enum EstadoLicitacion {
+  borrador
+  activa
+  finalizada
+  por_cobrar
+  cobrada
+  perdida
+}
+
+model Usuario {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  nombre    String
+  rol       Rol      @default(user)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+
+  licitaciones     Licitacion[]
+  transiciones     HistorialTransicion[]
+  pagosRegistrados Pago[]
+}
+
+model Cliente {
+  id        String   @id @default(cuid())
+  nombre    String
+  email     String
+  telefono  String?
+  empresa   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String?
+
+  licitaciones Licitacion[]
+}
+
+model Producto {
+  id          String   @id @default(cuid())
+  nombre      String
+  descripcion String?
+  precioBase  Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  createdBy   String?
+
+  licitaciones LicitacionProducto[]
+}
+
+model Licitacion {
+  id                  String           @id @default(cuid())
+  titulo              String
+  descripcion         String?
+  presupuestoMaximo   Float
+  fechaLimite         DateTime
+  estado              EstadoLicitacion @default(borrador)
+  documentoUrl        String?
+  documentoNombre     String?
+  clienteId           String
+  creadoPorId         String
+  recordatorioEnviado Boolean          @default(false)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  cliente   Cliente  @relation(fields: [clienteId], references: [id])
+  creadoPor Usuario  @relation(fields: [creadoPorId], references: [id])
+  productos LicitacionProducto[]
+  historial HistorialTransicion[]
+  pagos     Pago[]
+}
+
+model LicitacionProducto {
+  id             String @id @default(cuid())
+  licitacionId   String
+  productoId     String
+  cantidad       Int
+  precioUnitario Float
+
+  licitacion Licitacion @relation(fields: [licitacionId], references: [id])
+  producto   Producto   @relation(fields: [productoId], references: [id])
+
+  @@unique([licitacionId, productoId])
+}
+
+model HistorialTransicion {
+  id             String           @id @default(cuid())
+  licitacionId   String
+  estadoAnterior EstadoLicitacion
+  estadoNuevo    EstadoLicitacion
+  usuarioId      String
+  fecha          DateTime         @default(now())
+
+  licitacion Licitacion @relation(fields: [licitacionId], references: [id])
+  usuario    Usuario    @relation(fields: [usuarioId], references: [id])
+}
+
+model Pago {
+  id              String   @id @default(cuid())
+  licitacionId    String
+  monto           Float
+  referencia      String?
+  fecha           DateTime @default(now())
+  registradoPorId String
+
+  licitacion    Licitacion @relation(fields: [licitacionId], references: [id])
+  registradoPor Usuario    @relation(fields: [registradoPorId], references: [id])
+}
