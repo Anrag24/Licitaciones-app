@@ -189,5 +189,5 @@ La aplicación estará disponible en `http://localhost:3000`.
 - **Envío de Correos con Adjuntos:** Las notificaciones al cliente utilizan la API de Resend adjuntando el binario del documento de propuesta directamente en el payload del correo.
 - **Cron Jobs en Producción:** Configurados en `vercel.json` con programación diaria (`0 0 * * *`) y ejecución segura mediante autorización Bearer.
 ## Sección de Evidencias
-<img width="1917" height="906" alt="email-evidencia" src="https://github.com/user-attachments/assets/94395597-70c5-46c9-a09d-634987717b58" />
+<img width="1917" height="906" alt="email-evidencia" src="https://github.com/user-attachments/assets/5058c914-93dd-4cd5-bd89-93050b7cca38" />
 
